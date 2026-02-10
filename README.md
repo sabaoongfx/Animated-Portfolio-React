@@ -6,8 +6,10 @@ Perfect for developers, designers, and creatives who want a stunning portfolio w
 
 ![Animated Portfolio Screenshot](public/screenshot.png)
 
-### Demo Video
-[Watch the demo video](public/demo.webm) - Showcases 3D animations, theme toggle, and language switching.
+### Demo
+![Portfolio Demo](public/demo.gif)
+
+*3D animations, theme toggle, and multi-language support in action*
 
 ## Features
 
