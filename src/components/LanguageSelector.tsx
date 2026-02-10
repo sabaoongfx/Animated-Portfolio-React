@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
 import { colorClasses } from '../config/colors';
 
-type Language = 'en' | 'de';
+type Language = 'en' | 'de' | 'ar' | 'ja' | 'zh' | 'id' | 'es' | 'fr' | 'ru';
 
 interface LanguageOption {
   code: Language;
@@ -14,7 +14,14 @@ interface LanguageOption {
 
 const languages: LanguageOption[] = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪' }
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'zh', name: '中文', flag: '🇨🇳' },
+  { code: 'id', name: 'Indonesia', flag: '🇮🇩' },
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'ru', name: 'Русский', flag: '🇷🇺' }
 ];
 
 const LanguageSelector: React.FC = () => {
@@ -70,7 +77,7 @@ const LanguageSelector: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-full left-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden"
+            className="absolute top-full left-0 mt-2 w-48 max-h-80 bg-background border border-border rounded-lg shadow-lg z-50 overflow-y-auto"
           >
             <div className="py-1">
               {languages.map((lang) => (

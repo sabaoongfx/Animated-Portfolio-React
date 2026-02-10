@@ -15,7 +15,7 @@ src/
 ├── components/     # React components (Hero, Header, Services, ContactUs, etc.)
 ├── config/         # colors.ts - centralized color configuration
 ├── contexts/       # ThemeContext.tsx - dark/light mode provider
-├── i18n/           # LanguageContext.tsx - EN/DE translations
+├── i18n/           # LanguageContext.tsx - 9 language translations
 ├── utils/          # performance.ts - optimization utilities
 ├── App.tsx         # Main routing component
 └── main.tsx        # Entry point
@@ -34,7 +34,7 @@ api/                # Vercel serverless functions
 - **ContactUs.tsx** - Animated contact form with validation
 - **Admin.tsx** - Admin panel for managing contact submissions
 - **ThemeToggle.tsx** - Dark/light mode switcher
-- **LanguageSelector.tsx** - EN/DE language toggle
+- **LanguageSelector.tsx** - Multi-language selector (EN/DE/AR/JA/ZH/ID/ES/FR/RU)
 
 ## Routes
 - `/` - Main portfolio page (all sections)
@@ -42,10 +42,12 @@ api/                # Vercel serverless functions
 
 ## Commands
 ```bash
-npm run dev      # Start dev server
-npm run build    # TypeScript + Vite production build
-npm run lint     # ESLint checks
-npm run preview  # Preview production build
+npm run dev           # Start dev server
+npm run build         # TypeScript + Vite production build
+npm run lint          # ESLint checks
+npm run preview       # Preview production build
+npm test              # Run Selenium language tests
+npm run test:headless # Run tests in headless mode
 ```
 
 ## Environment Variables
@@ -59,7 +61,16 @@ npm run preview  # Preview production build
 - WebGL performance optimization with device detection and fallbacks
 - Input sanitization and validation in API endpoints
 
+## Supported Languages
+- English (en), German (de), Arabic (ar), Japanese (ja)
+- Chinese (zh), Indonesian (id), Spanish (es), French (fr), Russian (ru)
+
 ## Color Scheme
 - **Primary**: Dark navy blue (#003366)
 - **Accent**: Reddit orange (#FF4500)
 - Configured in `src/config/colors.ts`
+
+## Testing
+Selenium tests for language switching in `tests/selenium/`
+- Requires Chrome and ChromeDriver installed
+- Run `npm run dev` first, then `npm test` in another terminal
