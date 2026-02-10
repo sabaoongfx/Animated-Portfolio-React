@@ -4,6 +4,8 @@ An open-source, production-ready portfolio template featuring 3D animations, smo
 
 Perfect for developers, designers, and creatives who want a stunning portfolio with minimal setup.
 
+![Animated Portfolio Screenshot](public/screenshot.png)
+
 ## Features
 
 - Animated 3D backgrounds with Three.js
