@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme - Flutter site color scheme */
+    --background: 0 0% 98%; /* #FAFAFA */
+    --foreground: 0 0% 26%; /* #424242 */
+    --card: 0 0% 100%; /* White cards */
+    --card-foreground: 0 0% 26%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 26%;
+    --primary: 16 100% 50%; /* #FF4500 - Reddit orange */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 40%; /* #666666 - Secondary gray from Flutter */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 16 100% 50%; /* #FF4500 - Reddit orange */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 16 100% 50%; /* #FF4500 - Reddit orange */
+    --radius: 0.5rem;
+
+    font-family: 'Roboto', 'Inter', system-ui, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .dark {
+    /* Dark theme variables */
+    --background: 220 13% 9%; /* #1a1b23 */
+    --foreground: 0 0% 95%; /* #f2f2f2 */
+    --card: 220 13% 11%; /* #1f2937 */
+    --card-foreground: 0 0% 95%;
+    --popover: 220 13% 11%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 16 100% 50%; /* Lighter Reddit orange for dark mode */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 20%; /* #333333 */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 220 13% 15%; /* #2d3748 */
+    --muted-foreground: 0 0% 65%; /* #a6a6a6 */
+    --accent: 16 100% 50%; /* Lighter Reddit orange for dark mode */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 13% 20%; /* #374151 */
+    --input: 220 13% 20%;
+    --ring: 16 100% 50%; /* Lighter Reddit orange for dark mode */
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Ensure right-click context menu works */
+* {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Allow context menu on all elements */
+*, *::before, *::after {
+  pointer-events: auto;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar - Light mode */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--accent));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--accent) / 0.8);
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: hsl(var(--card));
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--accent));
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--accent) / 0.9);
+}
+
+/* Primary menu adaptive background */
+.primary-menu {
+  background-color: hsl(var(--background)) !important;
+  border-bottom: 1px solid hsl(var(--border));
+  transition: background-color 0.3s ease;
+}
