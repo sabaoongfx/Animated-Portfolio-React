@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "node tests/selenium/language.test.js",
-    "test:headless": "cross-env HEADLESS=true node tests/selenium/language.test.js"
+    "test:headless": "cross-env HEADLESS=true node tests/selenium/language.test.js",
+    "record-demo": "node tests/record-demo.js"
   },
   "dependencies": {
     "@react-three/drei": "^10.6.1",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
+    "@playwright/test": "^1.58.2",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@types/selenium-webdriver": "^4.35.5",

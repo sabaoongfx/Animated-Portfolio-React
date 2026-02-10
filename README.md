@@ -6,6 +6,9 @@ Perfect for developers, designers, and creatives who want a stunning portfolio w
 
 ![Animated Portfolio Screenshot](public/screenshot.png)
 
+### Demo Video
+[Watch the demo video](public/demo.webm) - Showcases 3D animations, theme toggle, and language switching.
+
 ## Features
 
 - **3D Animations** - Stunning WebGL backgrounds with Three.js and React Three Fiber
