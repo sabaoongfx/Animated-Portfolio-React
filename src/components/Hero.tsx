@@ -93,23 +93,12 @@ const Hero = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    // Also check for WebGL support and memory constraints
+    // Check for basic WebGL support
     const checkWebGLSupport = () => {
       try {
         const canvas = document.createElement('canvas');
         const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        if (!gl) return false;
-
-        // Check for sufficient memory
-        const debugInfo = (gl as WebGLRenderingContext).getExtension('WEBGL_debug_renderer_info');
-        if (debugInfo) {
-          const renderer = (gl as WebGLRenderingContext).getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-          // Disable 3D on integrated graphics or low-end GPUs
-          if (typeof renderer === 'string' && (renderer.includes('Intel') || renderer.includes('Microsoft Basic'))) {
-            return false;
-          }
-        }
-        return true;
+        return !!gl;
       } catch {
         return false;
       }
@@ -145,7 +134,7 @@ const Hero = () => {
                 antialias: false,
                 alpha: true,
                 powerPreference: isMobile ? "low-power" : "default",
-                failIfMajorPerformanceCaveat: true,
+                failIfMajorPerformanceCaveat: false,
                 preserveDrawingBuffer: false,
                 stencil: false,
                 depth: true

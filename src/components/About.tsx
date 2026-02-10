@@ -1,4 +1,4 @@
-import { useRef, Suspense, useState, useEffect } from 'react';
+import { useRef, Suspense, useState, useEffect, useCallback } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float } from '@react-three/drei';
 import { useInView } from 'framer-motion';
@@ -9,6 +9,182 @@ import { colorClasses } from '../config/colors';
 import { useTranslation } from '../i18n/LanguageContext';
 // To add your photo: place it in src/assets/ and import it here
 // import ProfilePhoto from '../assets/your-photo.jpg';
+
+// Contained Particle Background for cards
+interface ContainedParticle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  color: string;
+  shape: 'triangle' | 'square' | 'diamond' | 'hexagon' | 'pentagon';
+  rotation: number;
+  rotationSpeed: number;
+}
+
+const BRAND_COLORS = [
+  'rgba(255, 69, 0, 0.6)',
+  'rgba(255, 107, 53, 0.5)',
+  'rgba(251, 129, 60, 0.5)',
+  'rgba(253, 171, 116, 0.4)',
+  'rgba(254, 204, 170, 0.4)',
+];
+
+const SHAPES = ['triangle', 'square', 'diamond', 'hexagon', 'pentagon'] as const;
+
+const ContainedParticleBackground = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<ContainedParticle[]>([]);
+  const animationRef = useRef<number>(0);
+
+  const drawShape = useCallback((ctx: CanvasRenderingContext2D, particle: ContainedParticle) => {
+    ctx.save();
+    ctx.translate(particle.x, particle.y);
+    ctx.rotate(particle.rotation);
+    ctx.fillStyle = particle.color;
+    const size = particle.size;
+
+    switch (particle.shape) {
+      case 'triangle':
+        ctx.beginPath();
+        ctx.moveTo(0, -size);
+        ctx.lineTo(-size * 0.866, size * 0.5);
+        ctx.lineTo(size * 0.866, size * 0.5);
+        ctx.closePath();
+        ctx.fill();
+        break;
+      case 'square':
+        ctx.fillRect(-size / 2, -size / 2, size, size);
+        break;
+      case 'diamond':
+        ctx.beginPath();
+        ctx.moveTo(0, -size);
+        ctx.lineTo(size, 0);
+        ctx.lineTo(0, size);
+        ctx.lineTo(-size, 0);
+        ctx.closePath();
+        ctx.fill();
+        break;
+      case 'hexagon':
+        ctx.beginPath();
+        for (let i = 0; i < 6; i++) {
+          const angle = (i * Math.PI) / 3;
+          const x = size * Math.cos(angle);
+          const y = size * Math.sin(angle);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fill();
+        break;
+      case 'pentagon':
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          const angle = (i * 2 * Math.PI) / 5 - Math.PI / 2;
+          const x = size * Math.cos(angle);
+          const y = size * Math.sin(angle);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fill();
+        break;
+    }
+    ctx.restore();
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resizeCanvas = () => {
+      const parent = canvas.parentElement;
+      if (parent) {
+        canvas.width = parent.offsetWidth;
+        canvas.height = parent.offsetHeight;
+      }
+    };
+
+    const createParticles = () => {
+      const particles: ContainedParticle[] = [];
+      const count = 25;
+
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          size: Math.random() * 3 + 1,
+          color: BRAND_COLORS[Math.floor(Math.random() * BRAND_COLORS.length)],
+          shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
+          rotation: Math.random() * Math.PI * 2,
+          rotationSpeed: (Math.random() - 0.5) * 0.02,
+        });
+      }
+      particlesRef.current = particles;
+    };
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particlesRef.current.forEach((particle, index) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.rotation += particle.rotationSpeed;
+
+        if (particle.x < 0) particle.x = canvas.width;
+        if (particle.x > canvas.width) particle.x = 0;
+        if (particle.y < 0) particle.y = canvas.height;
+        if (particle.y > canvas.height) particle.y = 0;
+
+        drawShape(ctx, particle);
+
+        particlesRef.current.slice(index + 1).forEach((other) => {
+          const dx = particle.x - other.x;
+          const dy = particle.y - other.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 80) {
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(other.x, other.y);
+            ctx.strokeStyle = `rgba(255, 69, 0, ${0.15 * (1 - dist / 80)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        });
+      });
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    resizeCanvas();
+    createParticles();
+    animate();
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      createParticles();
+    });
+
+    return () => {
+      cancelAnimationFrame(animationRef.current);
+    };
+  }, [drawShape]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none z-0"
+      style={{ background: 'transparent' }}
+    />
+  );
+};
 
 // Animated Counter Component
 interface CounterProps {
@@ -93,22 +269,12 @@ const About = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    // Check for WebGL support and memory constraints
+    // Check for basic WebGL support
     const checkWebGLSupport = () => {
       try {
         const canvas = document.createElement('canvas');
         const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        if (!gl) return false;
-
-        // Check for sufficient memory and avoid integrated graphics
-        const debugInfo = (gl as WebGLRenderingContext).getExtension('WEBGL_debug_renderer_info');
-        if (debugInfo) {
-          const renderer = (gl as WebGLRenderingContext).getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-          if (typeof renderer === 'string' && (renderer.includes('Intel') || renderer.includes('Microsoft Basic'))) {
-            return false;
-          }
-        }
-        return true;
+        return !!gl;
       } catch {
         return false;
       }
@@ -145,7 +311,7 @@ const About = () => {
                 antialias: false, // Disable antialiasing to save memory
                 alpha: true,
                 powerPreference: "low-power",
-                failIfMajorPerformanceCaveat: true,
+                failIfMajorPerformanceCaveat: false,
                 preserveDrawingBuffer: false,
                 stencil: false,
                 depth: true
@@ -220,8 +386,9 @@ const About = () => {
             viewport={{ once: true }}
             className="relative"
           >
-            <div className={`w-full h-96 ${colorClasses.bg.accentLightOpacity} rounded-2xl backdrop-blur-sm border border-border/20 flex items-center justify-center`}>
-              <div className="text-center space-y-4">
+            <div className={`w-full h-96 ${colorClasses.bg.accentLightOpacity} rounded-2xl backdrop-blur-sm border border-border/20 flex items-center justify-center relative overflow-hidden`}>
+              <ContainedParticleBackground />
+              <div className="text-center space-y-4 relative z-10">
                 <div className="w-24 h-24 rounded-full mx-auto shadow-lg overflow-hidden border-4 border-white">
                   <div className="w-full h-full bg-[#FF4500] flex items-center justify-center text-white font-bold text-4xl">
                     S
