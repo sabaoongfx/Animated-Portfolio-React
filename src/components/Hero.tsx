@@ -133,28 +133,26 @@ const Hero = () => {
       <ParticleBackground />
 
 
-      {/* 3D Background - Only render on desktop with WebGL support */}
-      {!isMobile && hasWebGLSupport ? (
+      {/* 3D Background - Render on all devices with WebGL support */}
+      {hasWebGLSupport ? (
         <div className="absolute inset-0 z-10 opacity-30">
           <Suspense fallback={<WebGLFallback className="opacity-20" />}>
             <Canvas
-              camera={{ position: [0, 0, 5], fov: 75 }}
-              dpr={[0.5, 1]} // Reduced DPR for better performance
-              performance={{ min: 0.3, max: 0.8 }} // More conservative performance settings
+              camera={{ position: [0, 0, isMobile ? 6 : 5], fov: 75 }}
+              dpr={isMobile ? [0.3, 0.5] : [0.5, 1]} // Lower DPR on mobile
+              performance={{ min: 0.2, max: isMobile ? 0.5 : 0.8 }}
               gl={{
-                antialias: false, // Disable antialiasing to save memory
+                antialias: false,
                 alpha: true,
-                powerPreference: "low-power", // Use integrated GPU if available
-                failIfMajorPerformanceCaveat: true, // Fail gracefully on low-end devices
+                powerPreference: isMobile ? "low-power" : "default",
+                failIfMajorPerformanceCaveat: true,
                 preserveDrawingBuffer: false,
                 stencil: false,
                 depth: true
               }}
               onCreated={({ gl }) => {
-                // Set up context loss handling
                 gl.domElement.addEventListener('webglcontextlost', (e) => {
                   e.preventDefault();
-                  console.warn('WebGL context lost, switching to fallback');
                   setHasWebGLSupport(false);
                 }, false);
               }}
@@ -163,17 +161,17 @@ const Hero = () => {
               <directionalLight
                 position={[5, 5, 5]}
                 intensity={0.8}
-                castShadow={false} // Disable shadows to save memory
+                castShadow={false}
               />
-              <pointLight position={[10, 10, 10]} intensity={0.3} />
+              {!isMobile && <pointLight position={[10, 10, 10]} intensity={0.3} />}
               <FloatingShapes isDark={isDark} />
               <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
             </Canvas>
           </Suspense>
         </div>
-      ) : !isMobile ? (
+      ) : (
         <WebGLFallback className="z-10 opacity-20" />
-      ) : null}
+      )}
 
       {/* Content Overlay */}
       <div className="container relative z-20 flex flex-col items-center justify-center space-y-4 text-center">
