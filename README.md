@@ -8,27 +8,66 @@ Perfect for developers, designers, and creatives who want a stunning portfolio w
 
 ## Features
 
-- Animated 3D backgrounds with Three.js
-- Smooth page transitions with Framer Motion
-- Dark/Light theme support
-- Multi-language support (i18n)
-- Contact form with database storage
-- Admin panel for managing contacts
-- Responsive design for all devices
-- File upload capabilities
-- Production-ready with Vercel deployment
-- TypeScript for type safety
-- Tailwind CSS for easy customization
+- **3D Animations** - Stunning WebGL backgrounds with Three.js and React Three Fiber
+- **Smooth Transitions** - Page animations powered by Framer Motion
+- **Dark/Light Theme** - Toggle between themes with preference persistence
+- **9 Languages** - Full i18n support (English, German, Arabic, Japanese, Chinese, Indonesian, Spanish, French, Russian)
+- **Contact Form** - Database-backed contact form with validation
+- **Admin Panel** - Manage contact submissions at `/admin`
+- **Responsive Design** - Mobile-first, works on all devices
+- **File Upload** - Vercel Blob storage integration
+- **Production-Ready** - Optimized for Vercel deployment
+- **Type-Safe** - Full TypeScript implementation
+- **Modern Styling** - Tailwind CSS for easy customization
+
+## Supported Languages
+
+| Language | Code | Flag |
+|----------|------|------|
+| English | en | US |
+| German | de | DE |
+| Arabic | ar | AR |
+| Japanese | ja | JP |
+| Chinese | zh | CN |
+| Indonesian | id | ID |
+| Spanish | es | ES |
+| French | fr | FR |
+| Russian | ru | RU |
+
+Languages are auto-detected from browser preferences and can be changed via the language selector.
 
 ## Tech Stack
 
 - **Frontend**: React 19, TypeScript, Tailwind CSS, React Router
-- **3D Graphics**: Three.js, React Three Fiber
+- **3D Graphics**: Three.js, React Three Fiber, @react-three/drei
 - **Animations**: Framer Motion
-- **Backend**: Vercel Serverless Functions
+- **Backend**: Vercel Serverless Functions, Express 5
 - **Database**: Vercel Postgres
 - **Storage**: Vercel Blob
-- **Build Tool**: Vite
+- **Build Tool**: Vite 7
+- **Testing**: Selenium WebDriver
+- **Icons**: Lucide React
+
+## Project Structure
+
+```
+src/
+├── components/     # React components (Hero, Header, Services, etc.)
+├── config/         # Color configuration
+├── contexts/       # Theme context provider
+├── i18n/           # Language translations (9 languages)
+├── utils/          # Performance utilities
+├── App.tsx         # Main routing
+└── main.tsx        # Entry point
+
+api/                # Vercel serverless functions
+├── contact.js      # Contact form API
+├── admin/          # Admin endpoints
+└── lib/            # Database utilities
+
+tests/              # Selenium tests
+└── selenium/       # Language verification tests
+```
 
 ## Getting Started
 
@@ -76,10 +115,36 @@ Copy `.env.example` to `.env` and configure the following:
 
 ## Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run Selenium language tests |
+| `npm run test:headless` | Run tests in headless mode |
+
+## Testing
+
+Selenium tests are included to verify language switching functionality.
+
+### Prerequisites
+- Chrome browser installed
+- ChromeDriver matching your Chrome version
+
+### Running Tests
+```bash
+# Start dev server first
+npm run dev
+
+# In another terminal, run tests
+npm test
+
+# Or run in headless mode
+npm run test:headless
+```
+
+See [tests/README.md](tests/README.md) for more details.
 
 ## Deployment
 
